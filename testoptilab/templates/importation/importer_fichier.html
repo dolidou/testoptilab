@@ -1,0 +1,121 @@
+<!-- importation/importer_fichier.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if not filtered_data_list %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<form method="post" enctype="multipart/form-data" id="uploadForm">
+    {% csrf_token %}
+
+    <!-- Champs pour le fichier Excel -->
+    <label for="id_fichier_excel">Fichier Excel:</label>
+    <input type="file" name="fichier_excel" id="id_fichier_excel" required>
+    <!-- Champs pour les paramètres -->
+    <label for="id_valeur_maximale">Valeur Maximale:</label>
+    <input type="number" name="valeur_maximale" id="id_valeur_maximale">
+
+    <label for="id_nbre_case">Nombre de Cases:</label>
+    <input type="number" name="nbre_case" id="id_nbre_case">
+
+    <label for="id_coef">Coefficient:</label>
+    <input type="number" name="coef" id="id_coef">
+
+    
+
+     <!-- Champs pour les dates -->
+     <label for="id_date_debut">Date de début:</label>
+     <input type="datetime-local" name="date_debut" id="id_date_debut" required>
+ 
+     <label for="id_date_fin">Date de fin:</label>
+     <input type="datetime-local" name="date_fin" id="id_date_fin" required>
+ 
+    <!-- Bouton de soumission -->
+    <button type="submit" >Importer le fichier</button>
+</form>
+<div class="card shadow mb-6">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Tableau calcul 2</h6>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered"  id="myDataTable" width="100%" cellspacing="0">
+            <thead class="m-0 font-weight-bold bg-light text-black">
+                <tr>
+                    <th>Date</th>
+                    <th>Consommation</th>
+                    <!-- Ajoutez d'autres colonnes au besoin -->
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+               
+            </tbody>
+        </table>
+    <br>
+        
+    
+
+    </div>
+
+</div>
+{% endif %}
+<div id="resultContainer">
+
+</div>
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        event.preventDefault();  // Empêche le comportement de soumission par défaut
+
+        var form = event.target;
+        var formData = new FormData(form);
+
+        $.ajax({
+            type: form.method,
+            url: form.action,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                // Mettez à jour la div avec les résultats
+                $('#resultContainer').html(data);
+               // Ajoutez une nouvelle ligne au tbody
+               data.filtered_data.forEach(function(item) {
+                $('#tableBody').append('<tr><td>' + item.Date + '</td>' + '<td>' + item.Consommation + '</td>' + '</tr>');
+            });
+
+               
+                    console.log("mchat", data.filtered_data[0].Date);
+                // Ajoutez ici tout autre traitement nécessaire avec les données JSON
+            },
+            error: function (error) {
+                console.log('Erreur lors de la soumission du formulaire:', error);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready( function () {
+      $('#myDataTable').DataTable({
+      // Autres options DataTables ici
+      language: {
+          search: "",
+          searchPlaceholder: "Search",
+          lengthMenu: " _MENU_",
+          info: "Showing _START_ to _END_ of _TOTAL_ entries",
+          infoEmpty: "",
+          infoFiltered: "(filtered from _MAX_ total entries)",
+          paginate: {
+              first: "First",
+              last: "Last",
+              next: "Next",
+              previous: "Previous"
+          }
+      }
+  });
+} );
+
+</script>
+
+
+
+{% endblock %}

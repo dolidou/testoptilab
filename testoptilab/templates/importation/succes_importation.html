@@ -1,0 +1,106 @@
+<!-- succes_importation.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Résultats de l'importation</h2>
+    <!-- Afficher pas_1 et pas_2 -->
+    <p>Pas 1: {{ pas_1 }}</p>
+    <p>Pas 2: {{ pas_2 }}</p>
+    <p>Consommation minimale : {{ min_consommation }}</p>
+    <p>Consommation maximale : {{ max_consommation }}</p>
+    <p>Consommation moyenne : {{ moyenne_consommation }}</p>
+    <!-- Afficher les vecteurs pas1 et pas2 -->
+    <p>Vecteur Pas 1 : {{ vecteur_pas1 }}</p>
+    <p>Vecteur Pas 2 : {{ vecteur_pas2 }}</p>
+  <!-- Afficher les vecteurs consommation -->
+    <p>Vecteur Consommation 1 : {{ vecteur_consommation1 }}</p>
+    <p>Vecteur Consommation 2 : {{ vecteur_consommation2 }}</p>
+    <p>Vecteur Consommation Jour 1 : {{ vecteur_consommation_jour1 }}</p>
+    <p>Vecteur Consommation Jour 2 : {{ vecteur_consommation_jour2 }}</p>
+    <!-- Afficher les sommes d'intervalles -->
+    <p>Somme Intervalle 1 : {{ somme_intervalle1 }}</p>
+    <p>Somme Intervalle 2 : {{ somme_intervalle2 }}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Index</th>
+          <th>Vecteur Pas 1</th>
+          <th>Vecteur Consommation 1</th>
+          <th>Vecteur Consommation Jour 1</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for index, (pas1, consommation1, consommationJour1) in indices_et_valeurs_pas1_valeur_consommation_valeur_consomation_jour %}
+        <tr>
+            <td>{{ index }}</td>
+            <td>{{ pas1 }}</td>
+            <td>{{ consommation1 }}</td>
+            <td>{{ consommationJour1 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    <table id="table1">
+      <thead>
+        <tr>
+            <th>Index</th>
+            <th>Valeur</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for index, valeur in indices_et_valeurs_pas1 %}
+      <tr>
+          <td>{{ index }}</td>
+          <td>{{ valeur }}</td>
+      </tr>
+  {% endfor %}
+    </tbody>
+  </table>
+
+    <table id="myDataTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Consommation</th>
+                <!-- Ajoutez d'autres colonnes au besoin -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in filtered_data %}
+                <tr>
+                    <td>{{ entry.Date }}</td>
+                    <td>{{ entry.Consommation }}</td>
+                    <!-- Ajoutez d'autres colonnes au besoin -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+          $(document).ready( function () {
+            $('#myDataTable').DataTable({
+            // Autres options DataTables ici
+            language: {
+                search: "",
+                searchPlaceholder: "Search",
+                lengthMenu: " _MENU_",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            }
+        });
+    } );
+
+  </script>
+
+{% endblock %}

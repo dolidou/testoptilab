@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Masquer le bouton "Choisir un fichier" par défaut */
+ 
+
+    /* Styliser le bouton personnalisé */
+    input[type="file"]::file-selector-button {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        background-color: rgb(150, 181, 189);
+        color: #333;
+        border-radius: 4px;
+    }
+
+    /* Styliser le texte du bouton personnalisé */
+    input[type="file"]::file-selector-button::before {
+        content: 'joindre';
+    }
+
+    /* Mettre en surbrillance lorsqu'on passe la souris */
+    input[type="file"]::file-selector-button:hover {
+        background-color: #ddd;
+    }
+    .custom-file-upload {
+        /* Votre style personnalisé ici */
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .custom-file-upload:hover {
+        background-color: #45a049;
+    }
+</style>
+<div class="container-fluid">
+    <div class="col-sm-10 mx-auto"  >
+        <div class="card shadow mb-4 ">
+            <div class="card-header  py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Ajouter un fichier</h6>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="" id="formUp" >
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="custom-file">
+                                    <input type="file" name="fichier_excel" id="id_fichier_excel" class="custom-file-input custom-file-upload" required>
+                                    <label class="custom-file-label" for="id_fichier_excel">Joindre fichier excel</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="custom-file">
+                                    <label for="selected_column">Sélectionner la colonne :</label>
+                                    <input type="text" name="selected_column" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_valeur_maximale">Valeur Maximale:</label>
+                                <input type="number" name="valeur_maximale" id="id_valeur_maximale">                         
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_nbre_case">Nombre de Cases:</label>
+                                <input type="number" name="nbre_case" id="id_nbre_case">  
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_coef">Coefficient:</label>
+                                <input type="number" name="coef" id="id_coef">   
+                            </div>
+                        </div>
+                    </div>
+                 <br>
+                  <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Date de début:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input class="form-control fom-control-sm" name="date_debut"   id="date_debut" placeholder="JJ/MM/AAAA" type="datetime-local">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Date de fin:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <input class="form-control fom-control-sm" name="date_fin" id="id_date_fin"   placeholder="JJ/MM/AAAA HH:MM" type="datetime-local" required>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                                          
+                </div>
+                <!-- Bouton de soumission -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn bg-gradient-info  text-light ml-2" onclick="executecalcul()" target="_blank">Calculer</button>
+                    <button type="submit" class="btn btn bg-gradient-info  text-light ml-2" onclick="executedonnes()" >Voir données</button>
+
+                </div>
+            </form>
+    
+           
+        </div>
+    </div>
+    <div class="col-sm-10 mx-auto" >
+        
+            <div class="card shadow mb-3" >
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Historique</h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered"  id="myDataTable" width="100%" cellspacing="0">
+                        <thead class="m-0 font-weight-bold bg-light text-black">
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Fichier</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in fichier %}
+                                <tr>
+                                    <td>{{ entry.id }}</td>
+                                    <td>{{ entry.date }}</td>
+                                     {% if entry.fichier_excel %}
+                                     <td><a href="{{ entry.fichier_excel.url }}" download="{{ entry.fichier_excel.name }}">{{ entry.fichier_excel.name }}</a></td>
+                                     {% else %}
+                                       <td>Aucun fichier associé</td> 
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+           
+
+                </div>                   
+            </div>
+        
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready( function () {
+      $('#myDataTable').DataTable({
+      // Autres options DataTables ici
+      language: {
+          search: "",
+          searchPlaceholder: "Search",
+          lengthMenu: " _MENU_",
+          info: "Showing _START_ to _END_ of _TOTAL_ entries",
+          infoEmpty: "",
+          infoFiltered: "(filtered from _MAX_ total entries)",
+          paginate: {
+              first: "First",
+              last: "Last",
+              next: "Next",
+              previous: "Previous"
+          }
+      }
+  });
+} );
+
+</script>
+<script>
+    function executedonnes()
+    {
+        var updateUrl = "{% url 'testoptilab:import_donnees'  %}";
+            document.getElementById("formUp").setAttribute('action', updateUrl);
+    }
+    function executecalcul()
+    {
+        var updateUrl = "{% url 'testoptilab:importer_fichier_prem' %}";
+            document.getElementById("formUp").setAttribute('action', updateUrl);
+    }
+</script>
+
+{% endblock %}

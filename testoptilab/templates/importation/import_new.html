@@ -1,0 +1,420 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+    <!-- Dans votre_template.html -->
+    <script type="application/json" id="vecteur_consommation1">
+        {{ vecteur_consommation1_json|safe }}
+    </script>
+    <script type="application/json" id="vecteur_consommation2">
+        {{ vecteur_consommation2_json|safe }}
+    </script>
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-11">
+            <div class="text-left mb-3"> <!-- Utilisation de la classe text-right pour aligner à droite et mb-3 pour la marge en bas -->
+                    <!-- <button class="btn btn-primary" id="afficherajouterclient" onclick="affichecreationclient()">Ajouter un client</button> -->
+                    <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" id="affichertableau1" onclick="affichertableau1()">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-arrow-right"  ></i>
+                        </span>
+                        <span class="text text-black">Calcul tableau 1</span>
+                </a>
+                <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" id="affichertableau2" onclick="affichertableau2()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-arrow-right"  ></i>
+                    </span>
+                    <span class="text text-black">Calcul tableau 2</span>
+                 </a>
+                 <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" data-toggle="modal" data-target="#myModalValeur">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-arrow-right"  ></i>
+                    </span>
+                    <span class="text text-black">Calcul Min Max Moy</span>
+                 </a>
+                 <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" data-toggle="modal" data-target="#myModalTaux1">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-arrow-right"  ></i>
+                    </span>
+                    <span class="text text-black">Calcul taux pas1</span>
+                 </a>
+                 <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" data-toggle="modal" data-target="#myModalTaux2">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-arrow-right"  ></i>
+                    </span>
+                    <span class="text text-black">Calcul taux pas2</span>
+                 </a>
+            </div>
+           
+        </div>
+        <div class="col-sm-12 mx-auto" >
+            <!-- Premier tableau -->
+            <div class="row">
+              
+                <div class="col-md-6">
+                        <div class="card shadow mb-4" id="tableau1" style="display:none;">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Tableau calcul 1</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead class="m-0 font-weight-bold bg-light text-black">
+                                        <th>valeur max</th>
+                                        <th>nombre case</th>
+                                        <th>le pas</th>
+                                    </thead>
+                                    <tbody>
+                                        <td>{{valeur_maximale}}</td>
+                                        <td>{{nbre_case}}</td>
+                                        <td>{{pas_1}}</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-body table-responsive">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead class="rotate-header">
+                                        <tr class="m-0 font-weight-bold bg-light text-black">
+                                            <th class="rotate-header">index</th>
+                                            <th class="rotate-header">P pic</th>
+                                            <th class="rotate-header">1/4 heures</th>
+                                            <th class="rotate-header">Jour</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="rotate-body">
+                                        {% for index, valeur1, valeur2, valeur3 in indices_et_valeurs_pas1_valeur_consommation_valeur_consomation_jour %}
+                                            <tr>
+                                                <td class="rotate-cell">{{ index }}</td>
+                                                <td class="rotate-cell">{{ valeur1 }}</td>
+                                                <td class="rotate-cell">{{ valeur2 }}</td>
+                                                <td class="rotate-cell">{{ valeur3 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot class="rotate-footer">
+                                        <tr>
+                                            <th colspan="2" class="rotate-header">Total :</th>
+                                            <th class="rotate-header"><input class="form-control form-control-sm" type="text" id="total_vecteur_consommation1" value="{{total_vecteur_consommation1}}"></th>
+                                            <th class="rotate-header">{{total_vecteur_consommation_jour1}}</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow mb-4" id="tableau2" style="display: none;">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Tableau calcul 2</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                <thead class="m-0 font-weight-bold bg-light text-black">
+                                    <th>calibre</th>
+                                    <th>nombre case</th>
+                                    <th>le pas</th>
+                                </thead>
+                                <tbody>
+                                    <td>{{coef}}</td>
+                                    <td>{{nbre_case}}</td>
+                                    <td>{{pas_2}}</td>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-bordered rotate-table" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr class="m-0 font-weight-bold bg-light text-black">
+                                        <th>index</th>
+                                        <th>T ext</th>
+                                        <th>heures</th>
+                                        <th>Jour</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for index, valeur1, valeur2, valeur3 in indices_et_valeurs_pas2_valeur_consommation_valeur_consomation_jour2 %}
+                                        <tr>
+                                            <td>{{ index }}</td>
+                                            <td>{{ valeur1 }}</td>
+                                            <td>{{ valeur2 }}</td>
+                                            <td>{{ valeur3 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Total :</th>
+                                        <th><input class="form-control form-control-sm" type="text" id="total_vecteur_consommation2" value="{{total_vecteur_consommation2}}"></th>
+                                        <th>{{total_vecteur_consommation_jour2}}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="myModalValeur" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Résultats MaxMinMoy</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead class="m-0 font-weight-bold bg-light text-black">
+                                        <tr>
+                                            <th>Valeur maximale 1/4 heure</th>
+                                            <th>Valeur minimale 1/4 heure</th>
+                                            <th>Valeur moyenne 1/4 heure</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ max_consommation }}</td>
+                                            <td>{{ min_consommation }}</td>
+                                            <td>{{ moyenne_consommation }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="myModalTaux1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Résultats Calcul Taux de pas 1</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="debut_interval">Début interval:</label>
+                                <select id="debut_interval" name="debut_interval">
+                                    {% for value in vecteur_pas1 %}
+                                        <option value="{{ forloop.counter }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="fin_interval">Fin interval:</label>
+                                <select id="fin_interval" name="fin_interval">
+                                    {% for value in vecteur_pas1 %}
+                                        <option value="{{ forloop.counter }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                <div class="col-sm-11">
+                                    <div class="text-left mb-3">
+                                        <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" onclick="calculerSommeEtTauxPas1()">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-arrow-right"  ></i>
+                                            </span>
+                                            <span class="text text-black">Calculer Somme Intervalle + taux 1</span>
+                                        </a>   
+                                    </div>
+                                </div>                          
+                                <div class="col-md-4" id="calculerSommeEtTauxPas1" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="">Somme Interval:</label>
+                                        <input class="form-control form-control-sm" type="text" id="somme_intervalle1" readonly>                                    </div>
+                                        <label for="">Taux 1:</label>
+                                        <input class="form-control form-control-sm" type="text" id="taux_pas1" readonly>                                    
+                                    </div>
+                                </div>    
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="myModalTaux2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Résultats Calcul Taux de pas 2 </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="debut_interval2">Début interval:</label>
+                                <select id="debut_interval2" name="debut_interval2">
+                                    {% for value in vecteur_pas2 %}
+                                        <option value="{{ forloop.counter }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="fin_interval2">Fin interval:</label>
+                                <select id="fin_interval2" name="fin_interval2">
+                                    {% for value in vecteur_pas2 %}
+                                        <option value="{{ forloop.counter }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <br>
+                                <div class="col-sm-11">
+                                    <div class="text-left mb-3">
+                                        <a   class="btn bg-gradient-primary border-left-secondary border-bottom-secondary ml-2 text-light btn-icon-split" onclick="calculerSommeEtTauxPas2()">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-arrow-right"  ></i>
+                                            </span>
+                                            <span class="text text-black">Calculer Somme Intervalle + taux 2</span>
+                                        </a>   
+                                    </div>
+                                </div>                          
+                                <div class="col-md-4" id="calculerSommeEtTauxPas2" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="">Somme Interval 2:</label>
+                                        <input class="form-control form-control-sm" type="text" id="somme_intervalle2" readonly>                                    </div>
+                                        <label for="">Taux 2:</label>
+                                        <input class="form-control form-control-sm" type="text" id="taux_pas2" readonly>  
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+  
+    
+</div>
+<script>
+    function affichertableau1()
+    {
+        document.getElementById("tableau1").style.display="block"
+    }
+    function affichertableau2()
+    {
+        document.getElementById("tableau2").style.display="block"
+    }
+</script>
+<script>
+    $(document).ready( function () {
+      $('#myDataTable').DataTable({
+      // Autres options DataTables ici
+      language: {
+          search: "",
+          searchPlaceholder: "Search",
+          lengthMenu: " _MENU_",
+          info: "Showing _START_ to _END_ of _TOTAL_ entries",
+          infoEmpty: "",
+          infoFiltered: "(filtered from _MAX_ total entries)",
+          paginate: {
+              first: "First",
+              last: "Last",
+              next: "Next",
+              previous: "Previous"
+          }
+      }
+  });
+} );
+
+</script>
+<script>
+    function calculerSommeIntervalle() {
+        var vecteur_consommation1 = JSON.parse(document.getElementById("vecteur_consommation1").textContent);
+        var debut_interval = parseFloat(document.getElementById("debut_interval").value);
+        var fin_interval = parseFloat(document.getElementById("fin_interval").value);
+
+        // Effectuez le calcul avec debut_interval et fin_interval
+        var somme_intervalle1 = vecteur_consommation1.slice(debut_interval - 1, fin_interval).reduce((a, b) => a + b, 0) / 4;
+
+        document.getElementById("somme_intervalle1").value = somme_intervalle1;
+        // Affichez ou utilisez les résultats comme nécessaire
+        console.log("Somme Intervalle 1: " + somme_intervalle1);
+        console.log(vecteur_consommation1[1],debut_interval);
+    }
+    function calculerSommeIntervalle2() {
+        var vecteur_consommation2 = JSON.parse(document.getElementById("vecteur_consommation2").textContent);
+        var debut_interval2 = parseFloat(document.getElementById("debut_interval2").value);
+        var fin_interval2 = parseFloat(document.getElementById("fin_interval2").value);
+
+        // Effectuez le calcul avec debut_interval et fin_interval
+        var somme_intervalle2 = vecteur_consommation2.slice(debut_interval2 - 1, fin_interval2).reduce((a, b) => a + b, 0) ;
+
+        document.getElementById("somme_intervalle2").value = somme_intervalle2;
+        // Affichez ou utilisez les résultats comme nécessaire
+        console.log("Somme Intervalle 1: " + somme_intervalle2);
+        console.log(vecteur_consommation2[1],debut_interval2);
+    }
+</script>
+<script>
+    function calculerSommeEtTauxPas1() {
+    // Appelez d'abord la fonction pour calculer la somme de l'intervalle
+    calculerSommeIntervalle();
+
+    // Ensuite, appelez la fonction pour calculer le taux Pas1
+    calculerTauxPas1();
+    document.getElementById("calculerSommeEtTauxPas1").style.display="block"
+}
+function calculerSommeEtTauxPas2() {
+    // Appelez d'abord la fonction pour calculer la somme de l'intervalle
+    calculerSommeIntervalle2();
+
+    // Ensuite, appelez la fonction pour calculer le taux Pas1
+    calculerTauxPas2();
+    document.getElementById("calculerSommeEtTauxPas2").style.display="block"
+}
+</script>
+<script>
+    function calculerTauxPas1() {
+        var somme_intervalle1 = document.getElementById("somme_intervalle1").value;
+        var total_vecteur_consommation1 = document.getElementById("total_vecteur_consommation1").value;
+
+        // Effectuez le calcul du taux
+        var taux_pas1 = round(somme_intervalle1 / total_vecteur_consommation1 * 4 * 100, 2);
+        document.getElementById("taux_pas1").value = taux_pas1;
+        console.log(total_vecteur_consommation1);
+        // Affichez ou utilisez le résultat comme nécessaire
+        console.log("Taux Pas1: " + taux_pas1);
+    }
+    function calculerTauxPas2() {
+        var somme_intervalle2 = document.getElementById("somme_intervalle2").value;
+        var total_vecteur_consommation2 = document.getElementById("total_vecteur_consommation2").value;
+
+        // Effectuez le calcul du taux
+        var taux_pas2 = round(somme_intervalle2 / total_vecteur_consommation2  * 100, 2);
+        document.getElementById("taux_pas2").value = taux_pas2;
+        console.log(total_vecteur_consommation2);
+        // Affichez ou utilisez le résultat comme nécessaire
+        console.log("Taux Pas1: " + taux_pas2);
+    }
+
+    // Fonction pour arrondir un nombre à deux décimales
+    function round(value, decimals) {
+        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+    $('#dataTableconsomation').DataTable({
+        // Autres options DataTables ici
+        language: {
+            search: "",
+            searchPlaceholder: "Search",
+            lengthMenu: " _MENU_",
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            infoEmpty: "",
+            infoFiltered: "(filtered from _MAX_ total entries)",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

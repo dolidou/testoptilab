@@ -21,6 +21,26 @@ def affiche_fichier(request):
 
     return render(request,'testexcel/upload_excel.html',{'fichier':fichier})
 
+def donnees_traite(request, fichier_id):
+        fichier = get_object_or_404(Fichier, pk=fichier_id)
+        encoded_data = fichier.filtered_data_json
+        # Décodez les données base64
+        decoded_data = base64.b64decode(encoded_data)
+
+        # Décompressez les données
+        decompressed_data = gzip.decompress(decoded_data)
+
+        # Convertissez la chaîne JSON décompressée en une liste de dictionnaires
+        filtered_data_list = json.loads(decompressed_data.decode('utf-8'))
+        
+        context = {
+        'fichier': fichier,
+        'filtered_data_list': filtered_data_list
+         }    
+
+        return render(request, 'testexcel/testdatatable.html', context)
+
+    
 def details_page(request, fichier_id):
     fichier = get_object_or_404(Fichier, pk=fichier_id)
     encoded_data = fichier.filtered_data_json
@@ -472,10 +492,11 @@ def upload_excel(request):
                     consommation_annee1=vecteur_consommation_annee1[i],  # Assurez-vous que cette variable est définie dans votre code
                     consommation_annee2=vecteur_consommation_annee2[i],
                 )
-            
+            id_fichier=fichier_obj.id
         # Fermer le client Dask à la fin du traitement
             client.close()
             context = {
+                 'id_fichier' : id_fichier,
             'valeur_maximale': valeur_maximale,
                 'nbre_case': nbre_case,
                 'coef': coef,

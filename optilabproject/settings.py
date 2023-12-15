@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure--m_)he%z3($u0gn-ef4(jom5r9q8xkhdfo*r7^_tpieor08i)_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['77e3-41-109-234-54.ngrok-free.app', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS=['https://77e3-41-109-234-54.ngrok-free.app']
 
 
 # Application definition
@@ -50,6 +52,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
+
 ]
 
 ROOT_URLCONF = 'optilabproject.urls'

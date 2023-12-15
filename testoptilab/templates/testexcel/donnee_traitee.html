@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script type="application/json" id="filtered_data_json">
+    {{ filtered_data_list|safe }}
+</script>
+    <div class="container-fluid">
+    <div class="row">
+    
+        <div class="col-sm-8 mx-auto" >
+            <div class="card shadow mb-3" >
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Tableau de consommation</h6>
+                </div>
+                <div class="card-body">
+                    <table id="dataTable" class="table table-bordered dataTableconsomation" dataTablewidth="100%" cellspacing="0">
+                        <thead class="m-0 font-weight-bold bg-light text-black">
+                            <tr>
+                                <th>Date</th>
+                                <th>Consommation</th>
+                                <!-- Ajoutez d'autres colonnes au besoin -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+           
+
+                </div>                   
+            </div>           
+        </div>
+    </div>
+  
+    
+</div>
+
+
+
+
+
+<script>
+  var filt=document.getElementById('filtered_data_json').textContent;
+
+    // Supprimez les crochets [ ] de la chaîne JSON
+    var jsonString = filt; // Remplacez cela par votre chaîne JSON
+    var correctedJsonString = jsonString.replace(/'/g, '"');
+
+    // Remplacer les virgules entre les chiffres par des points
+    correctedJsonString = correctedJsonString.replace(/(\d),(\d)/g, '$1.$2');
+    // Parser la chaîne JSON corrigée
+    
+        var parsedData = JSON.parse(correctedJsonString);
+        var dates = parsedData.map(item => item.date);
+
+        var selected_column = parsedData.map(item => Object.values(item)[1]);
+
+    // Obtenez la référence de la table dans votre HTML
+var table = document.getElementById('dataTable');
+
+// Itérez sur la longueur de l'un des tableaux (supposons que les deux ont la même longueur)
+for (var i = 0; i < dates.length; i++) {
+    // Créez une nouvelle ligne dans la table
+    var row = table.insertRow();
+
+    // Créez des cellules pour la date et la colonne sélectionnée
+    var cellDate = row.insertCell(0);
+    var cellSelectedColumn = row.insertCell(1);
+
+    // Ajoutez les données aux cellules
+    cellDate.textContent = dates[i];
+    cellSelectedColumn.textContent = selected_column[i];
+}
+
+</script>
+
+{% endblock %}
